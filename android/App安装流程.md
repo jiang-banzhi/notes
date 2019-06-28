@@ -14,15 +14,17 @@
  3.在Launcher 生成一个 icon,icon中保存着默认启动Activity的信息
  4.将上面信息记录在一个xml文件中，以备下次安装时再次使用
  - android 手机每次启动时，都会使用PMS,把android系统中的所有apk都安装一遍：
- 1.读取上传安装时保存的app安装信息
- 2.扫描/安装在特定目录下的Apk
-   + data/app-private 受DRM保护的App
-   + data/app 用户自己安装的app
-   + system/framework 资源型app，用于打包
-   + system/app 系统自带的App
-   + vender/app 设备厂商提供的app
- 3.为app分配用户组id
- 4.把前面的安装信息写入本地文件，下次安装时使用
+ 
+    1.读取上传安装时保存的app安装信息
+    2.扫描/安装在特定目录下的Apk：
+     + data/app-private 受DRM保护的App
+     + data/app 用户自己安装的app
+     + system/framework 资源型app，用于打包
+     + system/app 系统自带的App
+     + vender/app 设备厂商提供的app
+   
+    3.为app分配用户组id
+    4.把前面的安装信息写入本地文件，下次安装时使用
  
 
 
