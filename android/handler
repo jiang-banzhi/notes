@@ -1,0 +1,32 @@
+1.一个线程能持有几个Looper?如何保证?]
+
+2.Handler内存泄漏的原因？其他内部类为什么没有这个问题？
+  泄漏原因时内部类持有外部类引用
+  //MessageQueue--持有-->Message--持有-->>handler--持有-->activity
+  
+3.为什么主线程可以new Handler?如果要在子线程new Handler要做些什么？
+  ActivityThread 已经Looper.prepare()  Looper.loop()
+  子线程中必须执行Looper.prepare() 和 Looper.loop()，handler才能正常使用
+
+4.子线程中维护Looper,消息队列无消息的时候的处理方案?有什么用?
+  处理方案：手动执行Looper.quit()
+  好处：释放内存、释放进程
+
+5.既然存在多个handler 往MessageQueue中添加数据（发送消息时各个handler可能处于不同线程），那它内部时如何确保线程安全?
+  synchronized 加锁
+  
+6.Handler的postDelayed()后消息会发生什么变化
+  消息为空->不执行
+  计算等待，wait
+
+
+7.Looper死循环为什么不会导致应用卡死?
+
+ Activity的生命周期都是由Handler来完成的。Looper死循环指的是Looper.loop（）方法里无限循环取出消息。而应用卡死指的是应用ANR，即应用无响应。
+ 不停地轮询消息队列并取出消息，然后将消息分发出去（简单的描述）。Android应用程序就是通过这个方法来达到及时响应用户操作。这个过程并不会导致ANR，
+ ANR指应用程序在一定时间内没有得到响应或者响应时间太长。在主线程的MessageQueue没有消息时，便阻塞在loop的queue.next()中的nativePollOnce()方法里，
+ 此时主线程会释放CPU资源进入休眠状态。因为没有消息，即不需要响应程序，便不会出现程序无响应（ANR）现象.
+
+总结：loop无限循环用于取出消息并将消息分发出去，没有消息时会阻塞在queue.next()里的nativePollOnce()方法里，并释放CPU资源进入休眠.
+Android的绝大部分操作都是通过Handler机制来完成的，
+如果没有消息，则不需要程序去响应，就不会有ANR.ANR一般是消息的处理过程中耗时太长导致没有及时响应用户操作.
